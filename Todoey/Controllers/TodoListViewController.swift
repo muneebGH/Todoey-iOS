@@ -16,18 +16,7 @@ class TodoListViewController: UITableViewController{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let newItem=Item()
-        newItem.title="Eat something"
-        itemArray.append(newItem)
-        
-        let newItem2=Item()
-        newItem2.title="learn iOS"
-        itemArray.append(newItem2)
-        
-        let newItem3=Item()
-        newItem3.title="laugh like a pro"
-        itemArray.append(newItem3)
-        
+        loadItems()
         
         // Do any additional setup after loading the view.
     }
@@ -99,7 +88,7 @@ class TodoListViewController: UITableViewController{
         self.present(alert, animated: true, completion: nil)
     }
     
-    //MARK: - Item saver
+    //MARK: - Item save and load manager
     
     func saveItems(){
         let encoder=PropertyListEncoder()
@@ -112,5 +101,21 @@ class TodoListViewController: UITableViewController{
         }
         
     }
+    
+    
+    func loadItems(){
+        
+        do {
+            if let data = try? Data(contentsOf: dataFilePath!){
+                let decoder=PropertyListDecoder()
+                itemArray = try decoder.decode([Item].self, from: data)
+            }
+        } catch  {
+            print("Error in loadig data from plist")
+        }
+       
+        
+    }
 }
+
 
